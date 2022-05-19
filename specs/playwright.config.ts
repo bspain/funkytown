@@ -45,21 +45,33 @@ const config: PlaywrightTestConfig = {
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: 'desktop-chrome',
       use: {
         ...devices['Desktop Chrome'],
       },
     },
+    {
+      name: 'mobile-chrome',
+      use: {
+        ...devices['Pixel 5'],
+      },
+    },
 
     {
-      name: 'firefox',
+      name: 'desktop-firefox',
       use: {
         ...devices['Desktop Firefox'],
       },
     },
 
     {
-      name: 'webkit',
+      name: 'mobile-webkit',
+      use: {
+        ...devices['iPhone 13'],
+      },
+    },
+    {
+      name: 'desktop-webkit',
       use: {
         ...devices['Desktop Safari'],
       },
