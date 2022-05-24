@@ -19,9 +19,9 @@ go work init ./controller ./worker ./shared
 ```
 
 ### Start the controller
-Start the controller providing the `REDIS_HOST` and `REDIS_PORT`
+Start the controller providing the `REDIS_HOST`, `REDIS_PORT`, and `GROUP_TASKS_FILE`
 ```
-REDIS_HOST=localhost REDIS_PORT=6379 go run github.com/bspain/funkytown/controller
+REDIS_HOST=localhost REDIS_PORT=6379 GROUP_TASKS_FILE=specs/spec_context_map.json go run github.com/bspain/funkytown/controller
 ```
 
 Should be able to use the `redis-cli` to verify the "run metatdata" object was created sucessfully.

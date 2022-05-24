@@ -1,27 +1,27 @@
 {
     "groups": [
         {
-            "name" : "search",
+            "name" : "alpha",
             "tasks": [
                 {
-                    "spec": "album_label_search.spec.ts",
+                    "spec": "alpha_spec_01.spec.ts",
                     "viewports": [ "desktop", "mobile" ],
                     "browsers": [ "chrome", "firefox", "webkit" ]
                 },
                 {
-                    "spec": "kids_clothing_search.spec.ts",
+                    "spec": "alpha_spec_02.spec.ts",
                     "viewports": [ "mobile" ],
                     "browsers": [ "chrome", "webkit" ]
                 }
             ]
         },
         {
-            "name" : "stores",
+            "name" : "beta",
             "tasks": [
                 {
-                    "spec": "find_a_store.spec.ts",
-                    "viewports": [ "desktop", "mobile" ],
-                    "browsers": [ "chrome", "firefox", "webkit" ]
+                    "spec": "beta_spec_01.spec.ts",
+                    "viewports": [ "mobile" ],
+                    "browsers": [ "webkit" ]
                 }
             ]
         }
