@@ -4,29 +4,24 @@
             "groupName" : "search",
             "tasks": [
                 {
-                    "spec": "album_lyric_search.spec.ts",
+                    "spec": "album_label_search.spec.ts",
                     "viewports": [ "desktop", "mobile" ],
                     "browsers": [ "chrome", "firefox", "webkit" ]
                 },
                 {
                     "spec": "kids_clothing_search.spec.ts",
                     "viewports": [ "mobile" ],
-                    "browsers": [ "firefox", "webkit" ]
+                    "browsers": [ "chrome", "webkit" ]
                 }
             ]
         },
         {
-            "groupName" : "shipping",
+            "groupName" : "stores",
             "tasks": [
                 {
-                    "spec": "ship_to_store.spec.ts",
+                    "spec": "find_a_store.spec.ts",
                     "viewports": [ "desktop", "mobile" ],
                     "browsers": [ "chrome", "firefox", "webkit" ]
-                },
-                {
-                    "spec": "ship_to_home.spec.ts",
-                    "viewports": [ "mobile" ],
-                    "browsers": [ "firefox", "webkit" ]
                 }
             ]
         }
