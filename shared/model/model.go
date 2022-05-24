@@ -8,14 +8,10 @@ type RunMetadata struct {
 	Finished       bool
 }
 
-type RunMetadataKey string
+type TaskMetadata struct {
+	KeyGroup string
 
-const (
-	KeyRunMetaId             RunMetadataKey = "runid"
-	KeyRunMetaTasksRemaining RunMetadataKey = "tasksremaining"
-	KeyRunMetaTasksFinished  RunMetadataKey = "tasksfinished"
-	KeyRunMetaFinished       RunMetadataKey = "finished"
-)
+}
 
 type Task struct {
 	Spec	string

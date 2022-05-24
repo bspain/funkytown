@@ -26,5 +26,12 @@ func main() {
 
 	f := redisfacade.NewFacade(ctx, redis_host, redis_port)
 
+	// Load in all tasks into the queue
 	f.SetRunMetadata("a_new_run", groupedtasklist.TaskCount())
+
+	for _, group := range groupedtasklist.Groups {
+		for i, task := range group.Tasks {
+			f.SetTaskMetadata(group.Name, i, task)
+		}
+	}	
 }
