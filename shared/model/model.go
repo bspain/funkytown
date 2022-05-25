@@ -1,5 +1,7 @@
 package model
 
+import "time"
+
 type RunMetadata struct {
 	Key            string
 	Runid          string
@@ -9,8 +11,16 @@ type RunMetadata struct {
 }
 
 type TaskMetadata struct {
-	KeyGroup string
-
+	Key string
+	Group string
+	Spec string
+	Viewport string
+	Browser string
+	Status string
+	Result string
+	StartTime time.Time
+	Duration int64
+	DurationString string
 }
 
 type Task struct {

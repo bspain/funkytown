@@ -31,8 +31,6 @@ func main() {
 	f := redisfacade.NewFacade(ctx, redis_host, redis_port)
 	size := groupedtasklist.TaskCount()
 
-	f.SetRunMetadata("a_new_run", size)
-
 	tasks := make(map[string]bool, size)
 
 	for _, group := range groupedtasklist.Groups {
@@ -47,6 +45,10 @@ func main() {
 			tasks[key] = false
 		}
 	}
+
+	// Set the run metadata, this is the signal to the workers that work is ready to begin.
+	f.SetRunMetadata("a_new_run", size)
+
 
 	// Monitor tasks loop
 	var t_complete = 0
@@ -80,5 +82,6 @@ func main() {
 		time.Sleep(scan_loop_sleep)
 	}
 
+	// TODO: Set run metadata finished
 	log.Printf("all tasks complete.  Controller exiting...")
 }

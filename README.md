@@ -10,6 +10,8 @@ Use docker to start a REDIS instance at localhost:6379
 docker run -d -p 6379:6379 redislabs/redismod
 ```
 
+> TIP: Using the `redis-cli`, you can easily reset the entire redis database using `FLUSHALL`
+
 ### Initialize the go workspace
 This project uses `go work` features of golang `1.18` : https://go.dev/blog/get-familiar-with-workspaces
 
@@ -38,3 +40,11 @@ redis-cli
 8) "0"
 127.0.0.1:6379> exit
 ```
+
+### Start the worker
+Start the worker providing the `REDIS_HOST`, `REDIS_PORT`, and `SPEC_ROOT`
+```
+REDIS_HOST=localhost REDIS_PORT=6379 SPEC_ROOT=specs go run github.com/bspain/funkytown/worker
+```
+
+

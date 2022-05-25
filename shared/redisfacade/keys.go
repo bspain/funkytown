@@ -17,6 +17,7 @@ func GetRunMetadataKeys() RunMetadataKeys {
 }
 
 type TaskMetadataKeys struct {
+	Key string
 	Group string
 	Spec string
 	Viewport string
@@ -24,13 +25,13 @@ type TaskMetadataKeys struct {
 	Status string
 	Result string
 	StartTime string
-	Iterations string
 	Duration string
 	DurationString string
 }
 
 func GetTaskMetadataKeys() TaskMetadataKeys {
 	return TaskMetadataKeys{
+		"key",
 		"group",
 		"spec",
 		"viewport",
@@ -38,7 +39,6 @@ func GetTaskMetadataKeys() TaskMetadataKeys {
 		"status",
 		"result",
 		"starttime",
-		"iterations",
 		"duration",
 		"durationstring",
 	}
