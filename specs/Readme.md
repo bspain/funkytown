@@ -18,7 +18,9 @@ npx playwright test
 
 Or individual browsers
 ```
-npx playwright test --project=chromium
-npx playwright test --project=firefox
-npx playwright test --project=webkit
+npx playwright test --project=desktop-chrome
+npx playwright test --project=desktop-webkit
+npx playwright test --project=desktop-firefox
+npx playwright test --project=mobile-chrome
+npx playwright test --project=mobile-webkit
 ```

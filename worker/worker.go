@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
-	"math/rand"
 	"os"
+	"os/exec"
+	"strings"
 	"time"
 
 	"github.com/bspain/funkytown/shared/redisfacade"
@@ -62,9 +64,32 @@ func main() {
 		log.Printf("working on task: %v", t.Key)
 
 		// TODO: Actual work
-		work_time := rand.Intn(3)
-		time.Sleep(time.Duration(int64(work_time) * time.Second.Nanoseconds()))
+		// work_time := rand.Intn(3)
+		// time.Sleep(time.Duration(int64(work_time) * time.Second.Nanoseconds()))
+		exe := "npx"
+		args := []string{
+			"playwright",
+			"test",
+			fmt.Sprintf("--project=%v-%v",t.Viewport, t.Browser),
+			t.Spec,
+		}
 
-		f.SetTaskAsCompleteWithPassedResult(&t)
+		cmd := exec.Command(exe, args...)
+		cmd.Dir = spec_root
+		log.Printf("%v > %v %v", spec_root, exe, strings.Join(args, " "))
+
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			if err.Error() == "exit status 1" {
+				log.Printf("cmd exited with status 1\n%v", string(output))
+				f.SetTaskAsCompleteWithFailedResult(&t)
+			} else {
+				log.Printf("error running cmd: %v", err)
+				f.SetTaskAsCompleteWithErrorResult(&t)
+			}
+		} else {
+			log.Printf("cmd exited with status 0\n%v", string(output))
+			f.SetTaskAsCompleteWithPassedResult(&t)
+		}
 	}
 }
