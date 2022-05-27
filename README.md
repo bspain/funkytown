@@ -57,6 +57,7 @@ docker build -f Dockerfile.controller -t controller:latest .
 
 Build the `worker` image
 ```
+docker build -f Dockerfile.worker -t worker:latest .
 ```
 
 ### Create the local docker network
@@ -71,5 +72,12 @@ Start the `controller` image
 
 ```
 docker run -it --rm --name controller --net funkytown -p 6379:6379 controller:latest
+```
+
+### Start the worker
+Start the `worker` image
+
+```
+docker run -it --name worker --net funkytown --ipc=host worker:latest
 ```
 

@@ -15,17 +15,17 @@ RUN GOOS=linux GOARCH=amd64 go build -o /src/bin/release/linux-64/worker github.
 
 # Playwright image (node 16.15.0)
 FROM mcr.microsoft.com/playwright:v1.22.0-focal
-COPY --from=build /src/bin/release/linux-64/worker /usr/bin/executor
+COPY --from=build /src/bin/release/linux-64/worker /usr/bin/worker
 
 # Specs
 WORKDIR /specs
 COPY specs/. .
 
-RUN node install
+RUN npm install
 
 # App startup
 WORKDIR /app
-ENV REDIS_HOST 127.0.0.1
+ENV REDIS_HOST controller
 ENV REDIS_PORT 6379
 ENV SPEC_ROOT /specs
 
