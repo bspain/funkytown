@@ -1,5 +1,7 @@
 # funkytown
-Kubernetes based functional testing app
+A Distributed System Proof of Concept application
+
+This project was designed to deal with a challenge in my company.  During a daily release of our core website, the dev team wanted 100's of Functional Specs (a mix of Webdriver, Cypress, and Playwright specs) to be executed "as fast as possible".  My idea was to implement this, using the ["Fine Parallel Processing Using a Work Queue" pattern.](https://kubernetes.io/docs/tasks/job/fine-parallel-processing-work-queue/)
 
 ## Local Testing 
 The `controller` and the `worker` can both be run locally using a docker hosted REDIS instance.
