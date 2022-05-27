@@ -3,6 +3,33 @@ A Distributed System Proof of Concept application
 
 This project was designed to deal with a challenge in my company.  During a daily release of our core website, the dev team wanted 100's of Functional Specs (a mix of Webdriver, Cypress, and Playwright specs) to be executed "as fast as possible".  My idea was to implement this, using the ["Fine Parallel Processing Using a Work Queue" pattern.](https://kubernetes.io/docs/tasks/job/fine-parallel-processing-work-queue/)
 
+The batch job begins by deploying a `controller` which will load a list of specs from a `"spec" list`.  It then pushes `task` objects, for each `spec` / `browser` / `viewport` combination (eliminating **invalid `browser` / `viewport`** combinations, such as `mobile` / `firefox`) into a `REDIS` DB.  One to N `worker` pods pop `tasks` and execute the spec accordingly.  `worker` will then push a `result` back into the `REDIS` DB.
+
+Once the `controller` and all `worker` pods exit, the batch job will be complete.
+
+```mermaid
+flowchart
+    subgraph K["kubernetes batch job"]
+        CS(controller start) --> PL
+        subgraph C ["controller"]
+            PL(parse spec list) --> PST(push tasks)
+            PL --> ML(monitor loop)
+            PST --->|task| RDB[(redis)]
+            ML <-->|tasks remaining?| RDB
+        end
+        WS(worker start) --> ML2
+        subgraph W ["worker"]
+            ML2(monitor loop) <-->|task available?| RDB
+            ML2 -->|task| POT(pop task)
+            POT --> RS(run spec)
+            RS --> PR(push result)
+            PR -->|result| RDB
+        end
+        ML -->|tasks finished| CE(controller exit)
+        ML2 -->|tasks finished| WE(worker exit)
+    end
+```
+
 ## Local Testing 
 The `controller` and the `worker` can both be run locally using a docker hosted REDIS instance.
 
