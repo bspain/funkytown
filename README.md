@@ -52,7 +52,7 @@ go work init ./controller ./worker ./shared
 ### Start the controller
 Start the controller providing the `REDIS_HOST`, `REDIS_PORT`, and `GROUP_TASKS_FILE`
 ```
-REDIS_HOST=localhost REDIS_PORT=6379 GROUP_TASKS_FILE=specs/spec_context_map.json go run github.com/bspain/funkytown/controller
+REDIS_HOST=localhost REDIS_PORT=6379 GROUP_TASKS_FILE=specs/spec_context_map.json HTML_INDEX_FILE=controller/html/index.html go run github.com/bspain/funkytown/controller
 ```
 
 Should be able to use the `redis-cli` to verify the "run metatdata" object was created sucessfully.
@@ -100,7 +100,7 @@ docker network create funkytown
 Start the `controller` image
 
 ```
-docker run -it --rm --name controller --net funkytown -p 6379:6379 controller:latest
+docker run -it --rm --name controller --net funkytown -p 6379:6379 -p 80:3000 controller:latest
 ```
 
 ### Start the worker

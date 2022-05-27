@@ -12,7 +12,6 @@ type RunMetadata struct {
 
 type TaskMetadata struct {
 	Key string
-	Group string
 	Spec string
 	Viewport string
 	Browser string

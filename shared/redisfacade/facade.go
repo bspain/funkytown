@@ -118,14 +118,11 @@ func (f RedisFacade) GetRunMetadata() (model.RunMetadata, error, RedisFacadeErro
 
 
 // SetTaskMetadata will set (HMSET) the meta hash object for a task and return the hash key 
-func (f RedisFacade) SetTaskMetadata(groupname string, taskindex int, task model.Task) string {
+func (f RedisFacade) SetTaskMetadata(key string, task model.Task) {
 	keys := GetTaskMetadataKeys()
 	h := make(map[string]interface{})
 
-	key := fmt.Sprintf("task:%v:%v", groupname, taskindex)
-
 	h[string(keys.Key)] = key
-	h[string(keys.Group)] = groupname
 	h[string(keys.Spec)] = task.Spec
 	h[string(keys.Viewport)] = task.Viewport
 	h[string(keys.Browser)] = task.Browser
@@ -141,8 +138,6 @@ func (f RedisFacade) SetTaskMetadata(groupname string, taskindex int, task model
 	}
 
 	log.Printf("SetTaskMetadata: task metadata for %v set successfully.", key)
-
-	return key
 }
 
 
@@ -202,7 +197,6 @@ func (f RedisFacade) GetTaskMetadata(key string) model.TaskMetadata {
 
 	return model.TaskMetadata{
 		Key: obj[string(keys.Key)],
-		Group: obj[string(keys.Group)],
 		Spec: obj[string(keys.Spec)],
 		Viewport: obj[string(keys.Viewport)],
 		Browser: obj[string(keys.Browser)],

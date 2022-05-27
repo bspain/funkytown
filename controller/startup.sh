@@ -7,4 +7,4 @@ redis-server /etc/redis/redis.conf --daemonize yes
 
 # Startup controller
 echo "Starting controller..."
-REDIS_HOST=0.0.0.0 REDIS_PORT=6379 GROUP_TASKS_FILE=spec_context_map.json controller
+REDIS_HOST=0.0.0.0 REDIS_PORT=6379 GROUP_TASKS_FILE=spec_context_map.json HTML_INDEX_FILE=/html/index.html controller

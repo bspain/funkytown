@@ -1,0 +1,96 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>web merge queue</title>
+    <style>
+      :root {
+        --red: rgb(18, 91, 208);
+        --light-gray: #eee;
+      }
+      body {
+        font-family: Verdana, Arial, Tahoma, Serif;;
+        font-size: 16px;
+        background: var(--light-gray);
+        padding: 36px 36px;
+      }
+
+      .wrapper {
+        max-width: 768px;
+        margin: 0 auto;
+        background: white;
+        padding: 3em;
+        border-radius: 16px;
+      }
+      .alert {
+        background: rgb(249, 208, 208);
+        padding: 1em;
+      }
+
+      .alert strong {
+        color: var(--red);
+      }
+
+      .unknown {
+          background: rgb(224, 224, 224)
+      }
+      .passed {
+          background: rgb(84, 255, 84)
+      }
+      .failed, .error{
+          background: rgb(255, 120, 120)
+      }
+      .waiting {
+        background: rgb(224, 224, 224)
+      }
+      .processing {
+        background: rgb(0, 146, 146)
+      }
+      .complete {
+        background: rgb(175, 175, 175)
+      }
+      pre,
+      c {
+        font-family: "Andale Mono", Consolas, "Courier New", Courier, monospace;
+        background: var(--light-gray);
+        color: var(--red);
+      }
+
+      pre {
+        padding: 0.5em;
+      }
+      c {
+        padding: 0 0.25em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1>Funkytown spec execution results</h1>
+      <div>Tasks Remaining: {{ .Meta.TasksRemaining}}</div>
+      <div>Tasks Finished: {{ .Meta.TasksFinished}}</div>
+      <div>Finished: {{ .Meta.Finished}}</div>
+      <table>
+          <tr>
+              <th>Result</th>
+              <th>Status</th>
+              <th>Spec</th>
+              <th>Viewport</th>
+              <th>Browser</th>
+              <th>Duration</th>
+          </tr>
+          {{range $index, $element := .Tasks}}
+            <tr>
+                <td class='{{$element.Result}}'>{{ $element.Result }}</td>
+                <td class='{{$element.Status}}'>{{ $element.Status }}</td>
+                <td>{{ $element.Spec }}</td>
+                <td>{{ $element.Viewport }}</td>
+                <td>{{ $element.Browser }}</td>
+                <td>{{ $element.Duration }}</td>
+            </tr>
+         {{ end }}
+      </table>
+    </div>
+  </body>
+</html>

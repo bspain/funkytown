@@ -18,7 +18,6 @@ func GetRunMetadataKeys() RunMetadataKeys {
 
 type TaskMetadataKeys struct {
 	Key string
-	Group string
 	Spec string
 	Viewport string
 	Browser string
@@ -32,7 +31,6 @@ type TaskMetadataKeys struct {
 func GetTaskMetadataKeys() TaskMetadataKeys {
 	return TaskMetadataKeys{
 		"key",
-		"group",
 		"spec",
 		"viewport",
 		"browser",

@@ -15,6 +15,7 @@ COPY shared/. .
 # Controller code
 WORKDIR /src/controller
 COPY controller/. .
+RUN mkdir -p /html && cp html/index.html /html/index.html
 
 # Build and install
 WORKDIR /src
