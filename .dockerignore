@@ -1,0 +1,5 @@
+go.work
+bin
+.vscode
+__fixtures__
+specs/node_modules

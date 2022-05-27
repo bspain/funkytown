@@ -1,0 +1,32 @@
+FROM golang:1.18.1-buster as build
+
+# Shared code
+WORKDIR /src/shared
+COPY shared/. .
+
+# Worker code
+WORKDIR /src/worker
+COPY worker/. .
+
+# Build
+WORKDIR /src
+RUN go work init ./worker ./shared
+RUN GOOS=linux GOARCH=amd64 go build -o /src/bin/release/linux-64/worker github.com/bspain/funkytown/worker 
+
+# Playwright image (node 16.15.0)
+FROM mcr.microsoft.com/playwright:v1.22.0-focal
+COPY --from=build /src/bin/release/linux-64/worker /usr/bin/executor
+
+# Specs
+WORKDIR /specs
+COPY specs/. .
+
+RUN node install
+
+# App startup
+WORKDIR /app
+ENV REDIS_HOST 127.0.0.1
+ENV REDIS_PORT 6379
+ENV SPEC_ROOT /specs
+
+CMD [ "worker" ]

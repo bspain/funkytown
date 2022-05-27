@@ -1,0 +1,31 @@
+FROM golang:1.18.1-buster
+
+RUN apt update
+RUN apt install -y unzip less redis-server vim jq
+
+# Redis config
+ENV REDIS_HOST=localhost
+ENV REDIS_PORT=6379
+COPY controller/redis/redis.conf /etc/redis/redis.conf
+
+# Shared code
+WORKDIR /src/shared
+COPY shared/. .
+
+# Controller code
+WORKDIR /src/controller
+COPY controller/. .
+
+# Build and install
+WORKDIR /src
+RUN go work init ./controller ./shared
+RUN GOOS=linux GOARCH=amd64 go build -o /src/bin/release/linux-64/controller github.com/bspain/funkytown/controller 
+RUN cp /src/bin/release/linux-64/controller /usr/bin/controller
+
+# App startup code
+WORKDIR /app
+COPY controller/startup.sh .
+COPY specs/spec_context_map.json .
+
+# Start
+CMD [ "/app/startup.sh" ] 

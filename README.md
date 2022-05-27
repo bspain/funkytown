@@ -47,4 +47,29 @@ Start the worker providing the `REDIS_HOST`, `REDIS_PORT`, and `SPEC_ROOT`
 REDIS_HOST=localhost REDIS_PORT=6379 SPEC_ROOT=specs go run github.com/bspain/funkytown/worker
 ```
 
+## Local Docker Development
+
+### Build the applicaiton images
+Build the `controller` image
+```
+docker build -f Dockerfile.controller -t controller:latest .
+```
+
+Build the `worker` image
+```
+```
+
+### Create the local docker network
+The `controller` and `worker` instances will be communicating with each other, therefore they need a local network service.
+
+```
+docker network create funkytown
+```
+
+### Start the controller
+Start the `controller` image
+
+```
+docker run -it --rm --name controller --net funkytown -p 6379:6379 controller:latest
+```
 
