@@ -3,29 +3,32 @@ A Distributed System Proof of Concept application
 
 This project was designed to deal with a challenge in my company.  During a daily release of our core website, the dev team wanted 100's of Functional Specs (a mix of Webdriver, Cypress, and Playwright specs) to be executed "as fast as possible".  My idea was to implement this, using the ["Fine Parallel Processing Using a Work Queue" pattern.](https://kubernetes.io/docs/tasks/job/fine-parallel-processing-work-queue/)
 
-The batch job begins by deploying a `controller` which will load a list of specs from a `"spec" list`.  It then pushes `task` objects, for each `spec` / `browser` / `viewport` combination (eliminating **invalid `browser` / `viewport`** combinations, such as `mobile` / `firefox`) into a `REDIS` DB.  One to N `worker` pods pop `tasks` and execute the spec accordingly.  `worker` will then push a `result` back into the `REDIS` DB.
+The first part of the application is the `controller` pod, which hosts the **workqueue**.  It will load a list of specs from a `parse "spec" list` and enqueue a `task` object for each `spec` / `browser` / `viewport` combination.  It will **filter out invalid combinations** such as `mobile` / `firefox`. Each `tasks` is hosted in a `REDIS` DB.  The controller `monitor loop` will poll the **workqueue**, and update statistics as tasks finish.  The `controller` also hosts a `reporter` (at port `:3000`) which can visualize all the `tasks` in the workqueue, their execution results, and the overall statistics.
 
-Once the `controller` and all `worker` pods exit, the batch job will be complete.
+The second part of the application is the `worker` pods, which are executed as a **batch Job** resource.  One to N `worker` pods pop `tasks` and execute the spec accordingly.  Each `worker` will then push a `result` back into the `REDIS` DB.  Once all `worker` pods exit, the batch job will be complete.
+
+The `controller` pod remains until terminated.
 
 ```mermaid
 flowchart
-    subgraph K["kubernetes batch job"]
+    subgraph K["kubernetes"]
         CS(controller start) --> PL
-        subgraph C ["controller"]
-            PL(parse spec list) --> PST(push tasks)
+        subgraph C ["controller - pod"]
+            PL(parse list) --> PST(enqu tasks)
             PL --> ML(monitor loop)
             PST --->|task| RDB[(redis)]
             ML <-->|tasks remaining?| RDB
         end
         WS(worker start) --> ML2
-        subgraph W ["worker"]
-            ML2(monitor loop) <-->|task available?| RDB
-            ML2 -->|task| POT(pop task)
+        subgraph W ["worker(s) - job"]
+            ML2(worker loop) <-->|task available?| RDB
+            ML2 -->|task| POT(dequ task)
             POT --> RS(run spec)
             RS --> PR(push result)
             PR -->|result| RDB
         end
-        ML -->|tasks finished| CE(controller exit)
+        PL --> HR(host reporter)
+        ML -->|tasks finished| CE(monitor exit)
         ML2 -->|tasks finished| WE(worker exit)
     end
 ```
