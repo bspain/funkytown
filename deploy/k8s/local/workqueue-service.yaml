@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: funkytown-workqueue-service
+spec:
+  type: NodePort
+  selector:
+    workqueue: active
+  ports:
+  - protocol: TCP
+    port: 40379       # port exposed inside the cluster
+    targetPort: 6379  # port where the pod is exposing REDIS at
+    nodePort: 30379   # port to expose outside the cluster (for Dev Ingress - Prod would not include a nodePort as it will have to need to expose)

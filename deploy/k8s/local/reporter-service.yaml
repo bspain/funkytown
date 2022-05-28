@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: funkytown-reporter-service
+spec:
+  type: NodePort
+  selector:
+    reporter: active
+  ports:
+  - protocol: TCP
+    port: 40000       # port exposed inside the cluster
+    targetPort: 3000  # port where the pod is exposing REDIS at
+    nodePort: 30000   # port to expose outside the cluster

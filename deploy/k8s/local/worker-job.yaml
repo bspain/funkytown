@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: funkytown-worker-job
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+      containers:
+      - name: funkytown-worker-job
+        image: worker
+        imagePullPolicy: Never
+        env:
+          - name: REDIS_HOST
+            value: funkytown-workqueue-service
+          - name: REDIS_PORT
+            value: "40379"
+        volumeMounts:
+          - mountPath: /dev/shm
+            name: dshm
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "1000m"
+      restartPolicy: Never
