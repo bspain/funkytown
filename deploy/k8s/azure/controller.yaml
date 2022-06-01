@@ -9,7 +9,7 @@ spec:
   containers:
   - name: funkytown-controller
     image: funkytownacr.azurecr.io/controller:5bdb29aa260fa262b19e12ba2d6e1cd823c800a7
-    imagePullPolicy: Never
+    imagePullPolicy: IfNotPresent
     resources:
       requests:
         cpu: 250m
