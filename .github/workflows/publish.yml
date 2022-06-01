@@ -1,0 +1,35 @@
+on: [push]
+name: Build_and_Publish_to_ACR
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+        # checkout the repo
+        - name: 'Checkout GitHub Action'
+          uses: actions/checkout@main
+          
+        - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CONTAINER_SDKAUTH }}
+        
+        - name: 'Build and push controller image'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+        - run: |
+            docker build . -f Dockerfile.controller -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/controller:${{ github.sha }}
+            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/controller:${{ github.sha }}
+
+        - name: 'Build and push worker image'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+        - run: |
+            docker build . -f Dockerfile.worker -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/worker:${{ github.sha }}
+            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/worker:${{ github.sha }}
