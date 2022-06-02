@@ -22,8 +22,11 @@ spec:
       - mountPath: /dev/shm
         name: dshm
     resources:
+      requests:
+        memory: 2048Mi
+        cpu: 500m
       limits:
-        memory: "2048Mi"
-        cpu: "1500m"
+        memory: 4096Mi
+        cpu: 2000m
   restartPolicy: Never
   hostIPC: true
