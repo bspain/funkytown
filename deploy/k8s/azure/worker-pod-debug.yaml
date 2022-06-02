@@ -24,6 +24,6 @@ spec:
     resources:
       limits:
         memory: "2048Mi"
-        cpu: "2000m"
+        cpu: "1500m"
   restartPolicy: Never
   hostIPC: true
