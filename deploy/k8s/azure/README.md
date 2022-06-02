@@ -53,3 +53,34 @@ For this POC, I wanted to configure Github Actions for the `funkytown` repo to b
 5. Create action as shown at [`.github/workflows/publish.yml`](../../../.github/workflows/publish.yml)
 
 ## Create Azure Kubernetes Service
+Following along from [Kubernetes on Azure tutorial - Deploy a cluster - Azure Kubernetes Service | Microsoft Docs](https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster?tabs=azure-cli)
+
+
+1. Create the AKS cluster
+```
+az aks create --resource-group funkytown_rg --name funkytownaks --node-count 2 --generate-ssh-keys --attach-acr funkytownacr
+```
+
+2. Get AKS credentials.  This will directly setup certificate config in the Cloud shell `~/.kube/config`
+```
+az aks get-credentials --resource-group funkytown_rg --name funkytownaks
+```
+
+## Deploy Application Resources
+For this POC, I created **individual resource .yaml files** in `deploy/k8s/azure` - a typical deployment strategy would use one file, or orchestrate the application deployment with Helm
+
+During the POC work, I found it helpful to develop the **resource.yaml** files locally, and then use git to 'push/pull' those files in the Azure CLI shell.
+
+> TODO: I'm sure there are many more interesting ways to achieve this smoother.  Github codespaces perhaps?
+
+1. Clone the `funkytown` repo into the Azure CLI shell
+```
+git clone https://github.com/bspain/funkytown.git
+```
+
+2. Deploy the `controller` pod
+```
+cd deploy/k8s/azure
+
+kubectl apply -f deploy/k8s/azure/controller.yaml
+```
