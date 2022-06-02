@@ -1,4 +1,7 @@
-on: [push]
+on:
+  push:
+    branches:
+      - main
 name: Build_and_Publish_to_ACR
 
 jobs:
