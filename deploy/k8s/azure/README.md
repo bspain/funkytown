@@ -97,3 +97,29 @@ During the POC work, I found it helpful to develop the **resource.yaml** files l
     kubectl get service funkytown-
     reporter-service
     ```
+
+4. Deploy the `workqueue` service
+
+    ```
+    kubectl apply -f workqueue-service.yaml
+	```
+
+    As an optional step, you can test that the workqueue service is available within the cluster using a temp/redis pod
+
+    ```
+	kubectl run -i --tty temp --im
+	age redis --command "/bin/sh"
+	
+    If you don't see a command prompt, try pressing enter.
+	
+	# redis-cli -h funkytown-workqueue-service -p 6379
+	funkytown-workqueue-service:6379> hgetall runmeta
+	1) "runid"
+	2) "a_new_run"
+	3) "tasksremaining"
+	4) "12"
+	5) "tasksfinished"
+	6) "0"
+	7) "finished"
+	8) "0"
+    ```
