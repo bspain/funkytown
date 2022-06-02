@@ -105,9 +105,9 @@ After the pod is created, exec into the pod, move in the `/specs` path, and run 
 k exec -it funkytown-worker-debug bash
 
 root@funkytown-worker-debug:/app# 
-cd /specs
+cd specs
 
-root@funkytown-worker-debug:/specs#
+root@funkytown-worker-debug:/app/specs#
 npx playwright test --project=desktop-chrome find_a_store
 
 Running 1 test using 1 worker
