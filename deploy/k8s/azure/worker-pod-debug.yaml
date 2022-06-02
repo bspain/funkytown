@@ -23,7 +23,7 @@ spec:
         name: dshm
     resources:
       requests:
-        memory: 2048Mi
+        memory: 256Mi
         cpu: 500m
       limits:
         memory: 4096Mi
