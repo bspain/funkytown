@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: funkytown-controller
+  labels:
+    workqueue: active
+    reporter: active
+spec:
+  containers:
+  - name: funkytown-controller
+    image: funkytownacr.azurecr.io/controller:8bab37e297be0902846299e3afc552fda0d25b35
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 250m
+        memory: 64Mi
+      limits:
+        cpu: 500m
+        memory: 128Mi
+    ports:
+      - containerPort: 6379
+      - containerPort: 3000

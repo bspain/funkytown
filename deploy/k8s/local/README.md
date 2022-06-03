@@ -102,7 +102,7 @@ kubectl create -f deploy/k8s/local/worker-pod-debug.yaml
 
 After the pod is created, exec into the pod, move in the `/specs` path, and run a spec
 ```
-k exec -it funkytown-worker-debug bash
+kubectl exec -it funkytown-worker-debug bash
 
 root@funkytown-worker-debug:/app# 
 cd specs
