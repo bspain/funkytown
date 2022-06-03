@@ -123,3 +123,34 @@ During the POC work, I found it helpful to develop the **resource.yaml** files l
 	7) "finished"
 	8) "0"
     ```
+
+5. Deploy the `worker` as a Job
+
+    ```
+    kubectl create -f deploy/k8s/azure/worker-job.yaml
+    ```
+
+    The worker should start working, execute the job, and the pod should shut down once the job is finished.
+
+## Diagnostic: Confirm the worker can execute playwright specs within the cluster
+
+An optional diagnostic step is to run the `worker-pod-debug` spec, and then execute a spec from within
+
+```
+kubectl create -f deploy/k8s/azure/worker-pod-debug.yaml
+```
+
+After the pod is created, exec into the pod, move in the `/specs` path, and run a spec
+```
+kubectl exec -it funkytown-worker-debug bash
+
+root@funkytown-worker-debug:/app# 
+cd specs
+
+root@funkytown-worker-debug:/app/specs#
+npx playwright test --project=desktop-chrome find_a_store
+
+Running 1 test using 1 worker
+```
+
+Delete the debug pod with `kubectl delete po funkytown-worker-debug`
