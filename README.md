@@ -50,6 +50,9 @@ This POC supports several development and deployment options:
 - Azure Kubernetes Deployment (using Github Actions, Azure Container Registry, and Azure Kubernetes Service)
 
 ## Local Development using Docker
+This POC contains instructions on running each application locally, as well as hosting within Docker for containarized validation.
+
+See [`DEVELOPMENT.md`](DEVELOPMENT.md)
 
 ## Local Kubernetes Deployment
 This POC contains information about local K8's deployment testing (using Windows Subsystem Linux 2 and Docker for Desktop)
@@ -60,83 +63,3 @@ See [`deploy/k8s/local/README.md`](deploy/k8s/local/README.md) for details
 This POC integrates with Github Actions to build and publish images into Azure Container Registry (ACR).  Kuberentes resource .yaml files are then provided for deployment into and Azure Kubernetes Service (AKS)
 
 See [`deploy/k8s/azure/README.md`](deploy/k8s/azure/README.md) for details
-
-## Local Testing 
-The `controller` and the `worker` can both be run locally using a docker hosted REDIS instance.
-
-### Start local REDIS
-Use docker to start a REDIS instance at localhost:6379
-```
-docker run -d -p 6379:6379 redislabs/redismod
-```
-
-> TIP: Using the `redis-cli`, you can easily reset the entire redis database using `FLUSHALL`
-
-### Initialize the go workspace
-This project uses `go work` features of golang `1.18` : https://go.dev/blog/get-familiar-with-workspaces
-
-Create a workspace
-```
-go work init ./controller ./worker ./shared
-```
-
-### Start the controller
-Start the controller providing the `REDIS_HOST`, `REDIS_PORT`, and `GROUP_TASKS_FILE`
-```
-REDIS_HOST=localhost REDIS_PORT=6379 GROUP_TASKS_FILE=specs/spec_context_map.json HTML_INDEX_FILE=controller/html/index.html go run github.com/bspain/funkytown/controller
-```
-
-Should be able to use the `redis-cli` to verify the "run metatdata" object was created sucessfully.
-```
-redis-cli
-127.0.0.1:6379> hgetall runmeta
-1) "runid"
-2) "a_new_run"
-3) "cmdcount"
-4) "0"
-5) "cmdfinishedcount"
-6) "0"
-7) "finished"
-8) "0"
-127.0.0.1:6379> exit
-```
-
-### Start the worker
-Start the worker providing the `REDIS_HOST`, `REDIS_PORT`, and `SPEC_ROOT`
-```
-REDIS_HOST=localhost REDIS_PORT=6379 SPEC_ROOT=specs go run github.com/bspain/funkytown/worker
-```
-
-## Local Docker Development
-
-### <a name="ldd-build"></a>Build the application images
-Build the `controller` image
-```
-docker build -f Dockerfile.controller -t controller:latest .
-```
-
-Build the `worker` image
-```
-docker build -f Dockerfile.worker -t worker:latest .
-```
-
-### Create the local docker network
-The `controller` and `worker` instances will be communicating with each other, therefore they need a local network service.
-
-```
-docker network create funkytown
-```
-
-### Start the controller
-Start the `controller` image
-
-```
-docker run -it --rm --name controller --net funkytown -p 6379:6379 -p 80:3000 controller:latest
-```
-
-### Start the worker
-Start the `worker` image
-
-```
-docker run -it --name worker --net funkytown --ipc=host worker:latest
-```
