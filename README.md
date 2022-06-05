@@ -43,6 +43,24 @@ flowchart
     end
 ```
 
+# Development and Deployment
+This POC supports several development and deployment options:
+- Local Development using Docker
+- Local Kuberentes Deployment (using Windows Subsystem Linux 2 and Docker for Desktop)
+- Azure Kubernetes Deployment (using Github Actions, Azure Container Registry, and Azure Kubernetes Service)
+
+## Local Development using Docker
+
+## Local Kubernetes Deployment
+This POC contains information about local K8's deployment testing (using Windows Subsystem Linux 2 and Docker for Desktop)
+
+See [`deploy/k8s/local/README.md`](deploy/k8s/local/README.md) for details
+
+## Azure Kubernetes Deployment
+This POC integrates with Github Actions to build and publish images into Azure Container Registry (ACR).  Kuberentes resource .yaml files are then provided for deployment into and Azure Kubernetes Service (AKS)
+
+See [`deploy/k8s/azure/README.md`](deploy/k8s/azure/README.md) for details
+
 ## Local Testing 
 The `controller` and the `worker` can both be run locally using a docker hosted REDIS instance.
 
@@ -122,14 +140,3 @@ Start the `worker` image
 ```
 docker run -it --name worker --net funkytown --ipc=host worker:latest
 ```
-
-# Kubernetes deployment
-
-This POC contains information about local K8's deployment testing (using Windows Subsystem Linux 2 and Docker for Desktop)
-
-See [`deploy/k8s/local/README.md`](deploy/k8s/local/README.md) for details
-
-
-TODO: This POC contains information about Azure deployment, using Azure Container Registry (ACR) and Azure Kubernetes Service (AKS)
-
-See TODO
