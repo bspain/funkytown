@@ -1,35 +1,45 @@
 # funkytown
 A Distributed System Proof of Concept application
 
-This project was designed to deal with a challenge in my company.  During a daily release of our core website, the dev team wanted 100's of Functional Specs (a mix of Webdriver, Cypress, and Playwright specs) to be executed "as fast as possible".  My idea was to implement this, using the ["Fine Parallel Processing Using a Work Queue" pattern.](https://kubernetes.io/docs/tasks/job/fine-parallel-processing-work-queue/)
+This project was designed to deal with a challenge in my company.  During a daily release of our core website, the dev team wanted 100's of Functional Specs (a mix of Webdriver, Cypress, and Playwright specs) to be executed "as fast as possible".  My idea was to implement this, using the ["Fine Parallel Processing Using a Work Queue" pattern](https://kubernetes.io/docs/tasks/job/fine-parallel-processing-work-queue/) in Kubernetes.
 
-The first part of the application is the `controller` pod, which hosts the **workqueue**.  It will load a list of specs from a `parse "spec" list` and enqueue a `task` object for each `spec` / `browser` / `viewport` combination.  It will **filter out invalid combinations** such as `mobile` / `firefox`. Each `tasks` is hosted in a `REDIS` DB.  The controller `monitor loop` will poll the **workqueue**, and update statistics as tasks finish.  The `controller` also hosts a `reporter` (at port `:3000`) which can visualize all the `tasks` in the workqueue, their execution results, and the overall statistics.
+### The **Controller** application
+The first part of the application is the `controller` pod, which hosts the **workqueue** in a local REDIS store.  It will load the list of specs and enqueue a **task** object for each **spec** / **browser** / **viewport** combination.  It will **filter out invalid combinations** (_such as **mobile** / **firefox**_). The `controller` will poll the **workqueue**, and update statistics as tasks finish.
 
-The second part of the application is the `worker` pods, which are executed as a **batch Job** resource.  One to N `worker` pods pop `tasks` and execute the spec accordingly.  Each `worker` will then push a `result` back into the `REDIS` DB.  Once all `worker` pods exit, the batch job will be complete.
+The `controller` also hosts a `/results` endpoint (at port `:3000`), which is exposed via a **LoadBalancer** as the `reporter-service` (at port `:80`) which can be used to visualize all the **tasks** in the **workqueue**, their results, and the overall statistics.
 
 The `controller` pod remains until terminated.
+
+### The **Worker** application
+The second part of the application is the `worker` pods, which are executed as a **batch Job** resource.  One to N `worker` pods pop **tasks** from the **workqueue** and execute the spec accordingly.  Each `worker` will then push a **result** back into the **workqueue**.  Once all `worker` pods exit, the batch job will be complete.
+
 
 ```mermaid
 flowchart
     subgraph K["kubernetes"]
-        CS(controller start) --> PL
+        CS[/controller start/] --> PL
         subgraph C ["controller - pod"]
             PL(parse list) --> PST(enqu tasks)
             PL --> ML(monitor loop)
             PST --->|task| RDB[(redis)]
             ML <-->|tasks remaining?| RDB
+            PL --> HR(host reporter)
         end
-        WS(worker start) --> ML2
+        subgraph R ["workqueue service"]
+            RC(ClusterIP) -->|redis commands| RDB
+        end
+        WS[/worker start/] --> ML2
         subgraph W ["worker(s) - job"]
-            ML2(worker loop) <-->|task available?| RDB
+            ML2(worker loop) <-->|task available?| RC
             ML2 -->|task| POT(dequ task)
             POT --> RS(run spec)
             RS --> PR(push result)
-            PR -->|result| RDB
+            PR -->|result| RC
+            ML2 -->|tasks finished| WE[\worker exit\]
         end
-        PL --> HR(host reporter)
-        ML -->|tasks finished| CE(monitor exit)
-        ML2 -->|tasks finished| WE(worker exit)
+        subgraph S ["reporter service"]
+            HR --> RPS(LoadBalancer)
+        end
     end
 ```
 
