@@ -11,7 +11,7 @@ spec:
   - name: funkytown-worker
     command: [ "/bin/sh" ]
     args: ["-c", "while true; do tail -f /dev/null; sleep 60000;done"]
-    image: funkytownacr.azurecr.io/worker:8bab37e297be0902846299e3afc552fda0d25b35
+    image: funkytownacr.azurecr.io/worker:649be1375f0b4df04532d1a2312b8f3cae1772a5
     imagePullPolicy: IfNotPresent
     env:
       - name: REDIS_HOST
