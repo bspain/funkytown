@@ -15,13 +15,13 @@ spec:
         image: funkytownacr.azurecr.io/worker:{{ .Values.imageTag }}
         imagePullPolicy: IfNotPresent
         env:
-      - name: REDIS_HOST
-        valueFrom:
+        - name: REDIS_HOST
+          valueFrom:
             configMapKeyRef:
-                name: {{ .Release.Name }}-config
-                key: workqueueService
-          - name: REDIS_PORT
-            value: "6379"
+              name: {{ .Release.Name }}-config
+              key: workqueueService
+        - name: REDIS_PORT
+          value: "6379"
         volumeMounts:
           - mountPath: /dev/shm
             name: dshm
