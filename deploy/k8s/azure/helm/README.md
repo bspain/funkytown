@@ -1,5 +1,10 @@
 # Helm Funkytown Workflow
-This part of the POC uses Helm to create the full K8s deployment and trigger the spec execution job
+This part of the POC uses Helm to create the full K8s deployment and trigger the spec execution job.  These instructions assume the following assumptions (created in the [`deploy/k8s/azure/README.md`](../README.md))
+
+- Azure Cloud CLI with
+- Azure Kubernetes Cluster connected to
+- Azure Container Registry containing the `funkytown/controller` and `funkytown/worker` images
+
 
 ## Install the funkytown application
 From the Azure CLI, Use `helm install <app name and version> ./helm` to create the application installation.
