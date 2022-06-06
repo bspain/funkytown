@@ -68,3 +68,6 @@ This POC integrates with Github Actions to build and publish images into Azure C
 
 See [`deploy/k8s/azure/README.md`](deploy/k8s/azure/README.md) for details
 
+There is also a **helm** Chart for deployment as well
+
+See [`deploy/k8s/azure/helm/README.md](deploy/k8s/azure/helm/README.md)
