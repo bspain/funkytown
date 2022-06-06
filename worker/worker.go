@@ -63,9 +63,7 @@ func main() {
 		
 		log.Printf("working on task: %v", t.Key)
 
-		// TODO: Actual work
-		// work_time := rand.Intn(3)
-		// time.Sleep(time.Duration(int64(work_time) * time.Second.Nanoseconds()))
+		// do spec work
 		exe := "npx"
 		args := []string{
 			"playwright",
