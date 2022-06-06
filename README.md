@@ -59,7 +59,15 @@ This POC contains information about local K8's deployment testing (using Windows
 
 See [`deploy/k8s/local/README.md`](deploy/k8s/local/README.md) for details
 
+There is also a **helm** Chart for deployment as well
+
+See [`deploy/k8s/local/helm/README.md](deploy/k8s/local/helm/README.md)
+
 ## Azure Kubernetes Deployment
 This POC integrates with Github Actions to build and publish images into Azure Container Registry (ACR).  Kuberentes resource .yaml files are then provided for deployment into and Azure Kubernetes Service (AKS)
 
 See [`deploy/k8s/azure/README.md`](deploy/k8s/azure/README.md) for details
+
+There is also a **helm** Chart for deployment as well
+
+See [`deploy/k8s/azure/helm/README.md](deploy/k8s/azure/helm/README.md)
