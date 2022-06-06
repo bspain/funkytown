@@ -5,6 +5,9 @@ This project was designed to deal with a challenge in my company.  During a dail
 
 ## Associated Technologies
 - golang 1.18
+- node
+- typescript
+- playwright
 - docker
 - kubectl
 - helm
