@@ -43,6 +43,15 @@ flowchart
     end
 ```
 
+# Associated Technologies
+- golang 1.18
+- docker
+- kubectl
+- helm
+- Github Actions
+- Azure Container Registry
+- Azure Kubernetes Service
+
 # Development and Deployment
 This POC supports several development and deployment options:
 - Local Development using Docker
@@ -61,7 +70,7 @@ See [`deploy/k8s/local/README.md`](deploy/k8s/local/README.md) for details
 
 There is also a **helm** Chart for deployment as well
 
-See [`deploy/k8s/local/helm/README.md](deploy/k8s/local/helm/README.md)
+See [`deploy/k8s/local/helm/README.md`](deploy/k8s/local/helm/README.md)
 
 ## Azure Kubernetes Deployment
 This POC integrates with Github Actions to build and publish images into Azure Container Registry (ACR).  Kuberentes resource .yaml files are then provided for deployment into and Azure Kubernetes Service (AKS)
@@ -70,4 +79,4 @@ See [`deploy/k8s/azure/README.md`](deploy/k8s/azure/README.md) for details
 
 There is also a **helm** Chart for deployment as well
 
-See [`deploy/k8s/azure/helm/README.md](deploy/k8s/azure/helm/README.md)
+See [`deploy/k8s/azure/helm/README.md`](deploy/k8s/azure/helm/README.md)
