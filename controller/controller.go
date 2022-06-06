@@ -104,14 +104,20 @@ func MonitorQueue(f redisfacade.RedisFacade, tasks map[string]model.Task) {
 			if t_status == redisfacade.TASKSTATUS_COMPLETE {
 				finished_tasks[key] = true
 				t_complete++
+
+				// Update runmetadata
+				runmeta, err, _ := f.GetRunMetadata()
+				if (err != nil) {
+					panic(err)
+				}
+
+				f.UpdateRunMetadataTaskCount(runmeta.TasksRemaining - 1, runmeta.TasksFinished + 1)
 			}
 		}
 
 		log.Printf("task scan complete: %v waiting, %v processing, %v complete", t_waiting, t_processing, t_complete)
 		time.Sleep(scan_loop_sleep)
 	}
-
-	// TODO: Set run metadata finished
 	log.Printf("all tasks complete.  Monitor exiting...")
 }
 

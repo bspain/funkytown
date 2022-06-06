@@ -116,6 +116,31 @@ func (f RedisFacade) GetRunMetadata() (model.RunMetadata, error, RedisFacadeErro
 	}, nil, None
 }
 
+func (f RedisFacade) UpdateRunMetadataTaskCount(remaining int, finished int) {
+
+	keys := GetRunMetadataKeys()
+
+	runfinished := false
+	if (remaining == 0) {
+		runfinished = true
+	} 
+
+	values := []string{
+		string(keys.TasksRemaining),
+		fmt.Sprint(remaining),
+		string(keys.TasksFinished),
+		fmt.Sprint(finished),
+		string(keys.Finished),
+		fmt.Sprint(runfinished),
+	}
+
+	_, err := f.client.HSet(f.context, RUN_METADATA, values).Result()
+	if err != nil {
+		log.Fatalf("unable to update run metadata task count. %v", err)
+	}
+
+	log.Printf("updateRunMetadataTaskCount: remaining %v, finished %v, run finished %v", remaining, finished, runfinished)
+}
 
 // SetTaskMetadata will set (HMSET) the meta hash object for a task and return the hash key 
 func (f RedisFacade) SetTaskMetadata(key string, task model.Task) {
