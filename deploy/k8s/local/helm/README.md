@@ -18,7 +18,7 @@ funk-v1-controller   1/1     Running   0          3s
 funk-v1-worker       1/1     Running   0          3s
 ```
 
-> The use-case here is creating a separate instance of **funkytown** to test either a specific deployment of the Application Under Test, or to run an updated version of a spec.
+> The use-case here is creating a separate instance of **funkytown** to test either a specific deployment of the Application Under Test, or to run an updated version of a spec.  In it's current form however, this wouldn't work as the `reporter-service` TCP ports will collide.
 
 
 ## Uninstall the funkytown application 
