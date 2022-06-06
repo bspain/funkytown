@@ -6,7 +6,7 @@ This POC is leveraging [Docker for Desktop with Kubernetes being hosted by the W
 
 
 ## Starting the application in local kubernetes (Windows WSL2 + Docker for Desktop)
-If the `controller` image is not already built, [build it now](#ldd-build).  Otherwise, you should see it in your local docker registry
+If the `controller` image is not already built, [build it now](../../../DEVELOPMENT.md#ldd-build).  Otherwise, you should see it in your local docker registry
 
 ```
 docker images
