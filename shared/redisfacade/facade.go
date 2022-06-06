@@ -36,11 +36,13 @@ const (
 )
 // ----------------------
 
+// RedisFacade represents a REDIS DB connection and supporting functions for que/dequ workqueue tasks.
 type RedisFacade struct {
 	context context.Context
 	client  *redis.Client
 }
 
+// NewFacade will create a new facade to the REDIS DB
 func NewFacade(context context.Context, host string, port string) RedisFacade {
 	r := redis.NewClient(&redis.Options{
 		Addr:     host + ":" + port,
@@ -74,6 +76,7 @@ func (f RedisFacade) SetRunMetadata(runid string, taskcount int) {
 	log.Printf("SetRunMetadata: run metadata set successfully.")
 }
 
+// GetRunMetadata will return up to date information about the run
 func (f RedisFacade) GetRunMetadata() (model.RunMetadata, error, RedisFacadeErrorType) {
 	keys := GetRunMetadataKeys()
 	obj, err := f.client.HGetAll(f.context, RUN_METADATA).Result()
@@ -116,6 +119,7 @@ func (f RedisFacade) GetRunMetadata() (model.RunMetadata, error, RedisFacadeErro
 	}, nil, None
 }
 
+// UpdateRunMetadataTaskCount will set the number of tasks accordingly.  This function will also set the "finished" flag accordingly, once all tasks are noted as finished.
 func (f RedisFacade) UpdateRunMetadataTaskCount(remaining int, finished int) {
 
 	keys := GetRunMetadataKeys()
