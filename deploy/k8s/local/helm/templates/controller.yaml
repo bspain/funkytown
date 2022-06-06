@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-controller
+  labels:
+    workqueue: active
+    reporter: active
+spec:
+  containers:
+  - name: funkytown-controller
+    image: controller
+    imagePullPolicy: Never
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 6379
+      - containerPort: 3000
